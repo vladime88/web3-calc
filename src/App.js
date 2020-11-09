@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer,useState } from 'react'
-import { Stack, VStack, Button, Input, InputGroup, InputLeftAddon} from '@chakra-ui/core'
+import { Stack, VStack, Button, Input, InputGroup, InputLeftAddon, HStack, Text} from '@chakra-ui/core'
 // https://docs.ethers.io/v5/
 import { ethers } from 'ethers'
 import { isConnected2MetaMask, connect2Contract } from './utils/eth-utils'
@@ -57,16 +57,21 @@ function App() {
   const [web3State, web3Dispatch] = useReducer(web3Reducer, initialWeb3State)
   const [inputValue, setInputValue] = useState(0)
   const [inputValue2, setInputValue2] = useState(0)
+  const [getValue, setGetValue] = useState(0)
+
+  
 
   const handleOnClickAdd = async (nb1, nb2) => {
     const res = await web3State.calculator.add(nb1, nb2)
     console.log(res.toString())
+    setGetValue(res.toString())
   }
 
   const handleOnClickSub = async (nb1, nb2) => {
     try {
       const res = await web3State.calculator.sub(nb1, nb2)
       console.log(res.toString())
+      setGetValue(res.toString())
     } catch (e) {
       console.log(e.reason)
     }
@@ -75,12 +80,14 @@ function App() {
   const handleOnClickMul = async (nb1, nb2) => {
     const res = await web3State.calculator.mult(nb1, nb2)
     console.log(res.toString())
+    setGetValue(res.toString())
   }
 
   const handleOnClickDiv = async (nb1, nb2) => {
     try {
       const res = await web3State.calculator.div(nb1, nb2)
       console.log(res.toString())
+      setGetValue(res.toString())
     } catch (e) {
       console.log(e.reason)
     }
@@ -205,12 +212,20 @@ function App() {
           }}
         />
         </InputGroup>
+        <InputGroup>
+        <InputLeftAddon children="Result"/>
+        <Input value={getValue}/>
+        </InputGroup>
         </Stack>
         <Button onClick={async () => handleOnClickAdd(inputValue,inputValue2)}>Add</Button>
         <Button onClick={async () => handleOnClickSub(inputValue,inputValue2)}>Sub</Button>
         <Button onClick={async () => handleOnClickMul(inputValue,inputValue2)}>Mul</Button>
         <Button onClick={async () => handleOnClickDiv(inputValue,inputValue2)}>Div</Button>
-      </VStack>
+      
+        
+        
+        
+    </VStack>
     </>
   )
 }
